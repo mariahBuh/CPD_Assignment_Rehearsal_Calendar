@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:assignment_calendar/screens/add_rehearsal.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,6 +29,10 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddRehearsalScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(150, 48),
