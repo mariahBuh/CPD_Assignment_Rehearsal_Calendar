@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'add_rehearsal.dart'; 
+import 'add_rehearsal.dart';
+import 'Welcome.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,63 +62,72 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _rehearsals.isEmpty
-            ? const Center(
-                child: Text(
-                  'No Rehearsals Added.',
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
-            : ListView.builder(
-                itemCount: _rehearsals.length,
-                itemBuilder: (context, index) {
-                  final item = _rehearsals[index];
-                  final title = item['title'];
-                  final date = item['date'];
-                  final startTime = item['start_time'];
-                  final endTime = item['end_time'];
-                  final location = item['location'];
-
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16.0),
-                    decoration: BoxDecoration(
-                        color: Color(0xFF165E7F),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Rehearsal Title
-                          Text(
-                            title,
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          const SizedBox(height: 8),
-                          // Date
-                          Text(
-                            date,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          // Time range
-                          Text(
-                            '$startTime - $endTime',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          // Location
-                          Text(
-                            location,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ],
+        child: Column(
+          children: [
+            // Add the banner on top
+            const Welcome(),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _rehearsals.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No Rehearsals Added.',
+                        style: TextStyle(fontSize: 18),
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: _rehearsals.length,
+                      itemBuilder: (context, index) {
+                        final item = _rehearsals[index];
+                        final title = item['title'];
+                        final date = item['date'];
+                        final startTime = item['start_time'];
+                        final endTime = item['end_time'];
+                        final location = item['location'];
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16.0),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF165E7F),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Rehearsal Title
+                                Text(
+                                  title,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(height: 8),
+                                // Date
+                                Text(
+                                  date,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                // Time range
+                                Text(
+                                  '$startTime - $endTime',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                // Location
+                                Text(
+                                  location,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
+            ),
+          ],
+        ),
       ),
       // Button at the bottom to add a new rehearsal
       bottomNavigationBar: Container(
