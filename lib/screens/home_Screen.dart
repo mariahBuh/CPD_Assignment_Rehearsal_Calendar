@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rehearsal Calendar',style: const TextStyle(
+        title: const Text('Rehearsal Calendar',style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold
         ),),
         backgroundColor: const Color(0xFF165E7F),centerTitle: true,

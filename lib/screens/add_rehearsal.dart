@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'home_Screen.dart';
 
 class AddRehearsalScreen extends StatefulWidget {
   const AddRehearsalScreen({super.key});
@@ -9,17 +11,35 @@ class AddRehearsalScreen extends StatefulWidget {
 
 class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  // Form field variables
   String _title = '';
   String _date = '';
   String _startTime = '';
   String _endTime = '';
   String _location = '';
 
-  void _saveRehearsal() {
+  // Reference to the "rehearsals" node in Realtime Database
+  final DatabaseReference _rehearsalsRef =
+      FirebaseDatabase.instance.ref().child('rehearsals');
+
+  // Function to save rehearsal data to Firebase
+  Future<void> _saveRehearsal() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // TODO: Add Firebase or other storage logic here
-      // For now, just pop back to home or navigate
+
+      // Create a new child with a unique key and set its value
+      final newRehearsalRef = _rehearsalsRef.push();
+      await newRehearsalRef.set({
+        'title': _title,
+        'date': _date,
+        'start_time': _startTime,
+        'end_time': _endTime,
+        'location': _location,
+      });
+
+      // After saving, navigate back 
+      if (!mounted) return;
       Navigator.pop(context);
     }
   }
@@ -28,10 +48,9 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rehearsal Calendar',style: const TextStyle(
-          color: Colors.white, fontWeight: FontWeight.bold
-        ),),
-        backgroundColor: const Color(0xFF165E7F),centerTitle: true,
+        title: const Text('Add Rehearsal'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF165E7F),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -39,7 +58,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
           key: _formKey,
           child: Column(
             children: [
-              // REHEARSAL TITLE
+              // Rehearsal Title Field
               TextFormField(
                 decoration: _buildInputDecoration('Rehearsal Title'),
                 validator: (value) {
@@ -52,7 +71,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
               ),
               const SizedBox(height: 16),
 
-              // DATE OF REHEARSAL
+              // Date Field
               TextFormField(
                 decoration: _buildInputDecoration('Date of Rehearsal'),
                 readOnly: true,
@@ -73,7 +92,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
               ),
               const SizedBox(height: 16),
 
-              // START TIME & END TIME 
+              // Start Time & End Time Fields
               Row(
                 children: [
                   Expanded(
@@ -117,7 +136,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
               ),
               const SizedBox(height: 16),
 
-              // LOCATION
+              // Location Field
               TextFormField(
                 decoration: _buildInputDecoration('Location'),
                 validator: (value) {
@@ -129,11 +148,10 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
                 onSaved: (value) => _location = value!.trim(),
               ),
               const SizedBox(height: 16),
-
-              // BUTTONS
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  // Add Rehearsal Button
                   ElevatedButton(
                     onPressed: _saveRehearsal,
                     style: ElevatedButton.styleFrom(
@@ -143,11 +161,20 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    child: const Text('Add Rehearsal', style: TextStyle(color: Colors.white)),
+                    child: const Text(
+                      'Add Rehearsal',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
+                  // View All Rehearsals Button
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF165E7F),
@@ -156,7 +183,10 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    child: const Text('View All Rehearsals', style: TextStyle(color: Colors.white)),
+                    child: const Text(
+                      'View All Rehearsals',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -187,4 +217,3 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
     );
   }
 }
-
