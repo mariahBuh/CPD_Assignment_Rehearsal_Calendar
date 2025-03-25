@@ -1,3 +1,4 @@
+//Imported the required packages
 import 'package:assignment_calendar/notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'home_Screen.dart';
 import 'package:geolocator/geolocator.dart';
 
+// AddRehearsalScreen class
 class AddRehearsalScreen extends StatefulWidget {
   const AddRehearsalScreen({super.key});
-
+  
+  // Creating a new state object
   @override
   State<AddRehearsalScreen> createState() => _AddRehearsalScreenState();
 }
 
+// Creating a new state class
 class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
   final _formKey = GlobalKey<FormState>();
 
@@ -29,17 +33,25 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
   final DatabaseReference _rehearsalsRef =
       FirebaseDatabase.instance.ref().child('rehearsals');
 
+  // Function to get the current location
   Future<void> _getCurrentLocation() async {
+    // Printing a message to the console to check if its working
     print("Use current location tapped!");
 
     // For web, skip service and permission checks because they are causing errors and its not working.
     if (kIsWeb) {
+
+      // Getting the current position
       try {
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
+        // Setting the state of the location
         setState(() {
+          // Setting the location to the current position
           _location = "${position.latitude}, ${position.longitude}";
+
+          // Setting the location controller text to the location
           _locationController.text = _location;
         });
       } catch (e) {
@@ -71,6 +83,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
       }
     }
 
+    // Mobile: Check location permissions permanently denied.
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -86,7 +99,9 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
         desiredAccuracy: LocationAccuracy.high,
       );
       setState(() {
+        // Set the location to the current position
         _location = "${position.latitude}, ${position.longitude}";
+        // Set the location controller text to the location
         _locationController.text = _location;
       });
     } catch (e) {
@@ -127,6 +142,7 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
     }
   }
 
+  // Dispose the location controller
   @override
   void dispose() {
     _locationController.dispose();
@@ -153,8 +169,10 @@ class _AddRehearsalScreenState extends State<AddRehearsalScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+    // Widget for the Add Rehearsal screen
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Rehearsal', style: TextStyle(color: Colors.white),),

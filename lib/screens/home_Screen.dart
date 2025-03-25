@@ -1,8 +1,10 @@
+//Imported the required packages
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'add_rehearsal.dart';
 import 'Welcome.dart';
 
+// HomeScreen widget
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -10,6 +12,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+// HomeScreenState class
 class _HomeScreenState extends State<HomeScreen> {
   // Reference to "rehearsals" in Realtime Database
   final DatabaseReference _database =
@@ -28,9 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
           _rehearsals = [];
         });
       } else {
+        // Get the data from the snapshot
         final data = Map<String, dynamic>.from(event.snapshot.value as Map);
         final items = <Map<String, dynamic>>[];
 
+      // Add all rehearsals to the list
         data.forEach((key, value) {
           items.add({
             'key': key,
@@ -41,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'location': value['location'] ?? '',
           });
         });
-
+        
         setState(() {
           _rehearsals = items;
         });
@@ -51,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Widget to display the Rehearsal Calendar
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -64,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Add the banner on top
+            // Add the banner(stateless widget)on top
             const Welcome(),
             const SizedBox(height: 16),
             Expanded(
@@ -75,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(fontSize: 18),
                       ),
                     )
+                    // Display the list of rehearsals
                   : ListView.builder(
                       itemCount: _rehearsals.length,
                       itemBuilder: (context, index) {
@@ -137,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.push(
               context,
+              // Navigate to AddRehearsalScreen
               MaterialPageRoute(
                   builder: (context) => const AddRehearsalScreen()),
             );

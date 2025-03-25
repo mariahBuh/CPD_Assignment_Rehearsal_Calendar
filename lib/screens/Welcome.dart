@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+// Welcome widget
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
 
+  //Creating the stateless widget required and then displaying it in the Home screen 
   @override
   Widget build(BuildContext context) {
     return Container(
