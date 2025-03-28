@@ -1,11 +1,20 @@
 buildscript {
-    ext.kotlin_version = '1.9.0'  // Update this to a version that supports metadata 2.1.0
+    ext.kotlin_version = '1.9.20' 
+
+  ext {
+        flutter = [
+            compileSdkVersion: 35,
+            minSdkVersion    : 21,
+            targetSdkVersion : 35,
+        ]
+    }
+
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'  // or another version compatible with your Flutter version
+        classpath 'com.android.tools.build:gradle:7.2.0' 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.2'
     }

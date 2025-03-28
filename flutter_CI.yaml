@@ -1,0 +1,47 @@
+#This is a YAML file that defines the workflow for building and testing a Flutter app using GitHub Actions. 
+name: Flutter Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    name: Build and Test Flutter App
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up the Flutter environment using a pre-built action
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+
+      # Cache Flutter dependencies to speed up builds
+      - name: Cache Flutter Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/bin/cache
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      # Install dependencies from pubspec.yaml
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # Run the unit and widget tests
+      - name: Run Tests
+        run: flutter test
+
+      # Build the app for Web 
+      - name: Build Web App
+        run: flutter build web

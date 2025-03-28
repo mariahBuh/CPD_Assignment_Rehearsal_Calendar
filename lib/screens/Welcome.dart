@@ -15,7 +15,7 @@ class Welcome extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Text(
-        'Welcome to the Rehearsal Calendar!',
+        'Welcome to the StageSync!',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 20,
